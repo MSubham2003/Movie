@@ -1,5 +1,5 @@
 # Use a base image that includes Java and Maven
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM maven:3.9.9-eclipse-temurin-22 AS build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -14,13 +14,13 @@ RUN mvn clean package
 EXPOSE 8080
 
 # Second stage: Use a smaller base image to run the Java application
-FROM openjdk:17-jdk-alpine
+FROM openjdk:22-jdk-slim
 
 # Set the working directory in the final image
 WORKDIR /app
 
 # Copy the jar file from the build stage to the final image
-COPY --from=build /app/target/JournalAppPractice-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY --from=build /app/target/movie-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # Verify the JAR file is copied
 RUN ls -l /app
